@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="my_orders">My Orders</string>
+    <string name="shopping_cart">Shopping Cart</string>
+    <string name="my_account">My Account</string>
+    <string name="first_name">First Name</string>
+</resources>
