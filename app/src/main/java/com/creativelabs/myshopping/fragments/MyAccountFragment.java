@@ -2,6 +2,9 @@ package com.creativelabs.myshopping.fragments;
 
 import android.os.Bundle;
 
+import androidx.cardview.widget.CardView;
+import androidx.constraintlayout.widget.ConstraintLayout;
+import androidx.core.widget.NestedScrollView;
 import androidx.fragment.app.Fragment;
 
 import android.text.TextUtils;
@@ -69,6 +72,8 @@ public class MyAccountFragment extends Fragment {
     Button btnAccountUpdate;
     TextInputEditText etFirstName, etEmail, etPhoneNumber, etAddress;
     TextInputLayout tiFirstName, tiEmail, tiPhoneNumber, tiAddress;
+    NestedScrollView nsAccount;
+    ConstraintLayout vNotLoggedIn;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -88,6 +93,9 @@ public class MyAccountFragment extends Fragment {
         tiPhoneNumber = view.findViewById(R.id.tiPhoneNumber);
         tiAddress = view.findViewById(R.id.tiAddress);
 
+        vNotLoggedIn = view.findViewById(R.id.vNotLoggedIn);
+        nsAccount = view.findViewById(R.id.nsAccount);
+
         btnAccountUpdate.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -99,6 +107,15 @@ public class MyAccountFragment extends Fragment {
                 }
             }
         });
+
+        if (isLoggedIn()) {
+            nsAccount.setVisibility(View.VISIBLE);
+            vNotLoggedIn.setVisibility(View.GONE);
+        } else {
+            nsAccount.setVisibility(View.GONE);
+            vNotLoggedIn.setVisibility(View.VISIBLE);
+        }
+
         return view;
     }
 
@@ -142,5 +159,9 @@ public class MyAccountFragment extends Fragment {
         Matcher matcher = pattern.matcher(email);
 
         return matcher.matches();
+    }
+
+    private boolean isLoggedIn() {
+        return true;
     }
 }

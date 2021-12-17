@@ -41,4 +41,9 @@
         app:layout_constraintTop_toBottomOf="@+id/tlOrderTabs">
 
     </androidx.viewpager2.widget.ViewPager2>
+
+    <include
+        android:id="@+id/vNotLoggedIn"
+        layout="@layout/layout_not_loggedin"
+        android:visibility="gone" />
 </androidx.constraintlayout.widget.ConstraintLayout>

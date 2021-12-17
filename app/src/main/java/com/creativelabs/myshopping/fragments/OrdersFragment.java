@@ -4,6 +4,7 @@ import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.fragment.app.Fragment;
 import androidx.viewpager2.widget.ViewPager2;
 
@@ -65,6 +66,8 @@ public class OrdersFragment extends Fragment {
 
     ViewPager2 vpOrders;
     OrderPageAdapter orderPageAdapter;
+    TabLayout tlOrderTabs;
+    ConstraintLayout vNotLoggedIn;
     private String[] titleArray = {"All Orders", "Completed", "Cancelled"};
 
     @Override
@@ -73,6 +76,19 @@ public class OrdersFragment extends Fragment {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_orders, container, false);
         vpOrders = view.findViewById(R.id.vpOrders);
+        vNotLoggedIn = view.findViewById(R.id.vNotLoggedIn);
+        tlOrderTabs = view.findViewById(R.id.tlOrderTabs);
+
+        if (isLoggedIn()) {
+            vpOrders.setVisibility(View.VISIBLE);
+            tlOrderTabs.setVisibility(View.VISIBLE);
+            vNotLoggedIn.setVisibility(View.GONE);
+        } else {
+            vpOrders.setVisibility(View.GONE);
+            tlOrderTabs.setVisibility(View.GONE);
+            vNotLoggedIn.setVisibility(View.VISIBLE);
+        }
+
         return view;
     }
 
@@ -81,11 +97,13 @@ public class OrdersFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
         orderPageAdapter = new OrderPageAdapter(this);
         vpOrders.setAdapter(orderPageAdapter);
-
-        TabLayout tlOrderTabs = view.findViewById(R.id.tlOrderTabs);
         new TabLayoutMediator(tlOrderTabs, vpOrders,
                 (tab, position) -> tab.setText(titleArray[position])
         ).attach();
 
+    }
+
+    private boolean isLoggedIn() {
+        return false;
     }
 }

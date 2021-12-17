@@ -46,6 +46,11 @@ dependencies {
     implementation 'de.hdodenhof:circleimageview:3.1.0'
     // Toast Library
     implementation 'com.github.MrNtlu:Toastie:1.1.0'
+    // Number Picker Library
+    implementation 'com.github.travijuu:numberpicker:1.0.7'
+    // Picasso Image Library
+    implementation 'com.squareup.picasso:picasso:2.71828'
+
 
     implementation "androidx.multidex:multidex:2.0.1"
     implementation 'androidx.appcompat:appcompat:1.4.0'

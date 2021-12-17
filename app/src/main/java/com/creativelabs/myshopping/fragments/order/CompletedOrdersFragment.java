@@ -2,13 +2,22 @@ package com.creativelabs.myshopping.fragments.order;
 
 import android.os.Bundle;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
 import com.creativelabs.myshopping.R;
+import com.creativelabs.myshopping.adapters.OrdersAdapter;
+import com.creativelabs.myshopping.entity.Order;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -57,10 +66,38 @@ public class CompletedOrdersFragment extends Fragment {
         }
     }
 
+    RecyclerView rvAllOrders;
+    OrdersAdapter ordersAdapter;
+    List<Order> orderList;
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_completed_orders, container, false);
+        View view = inflater.inflate(R.layout.fragment_all_orders, container, false);
+        rvAllOrders = view.findViewById(R.id.rvAllOrders);
+
+        return view;
+    }
+
+    @Override
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+
+        ordersAdapter = new OrdersAdapter();
+        rvAllOrders.setLayoutManager(new LinearLayoutManager(getContext()));
+
+        rvAllOrders.setAdapter(ordersAdapter);
+        orderList = new ArrayList<>();
+
+        Order order = new Order();
+        order.setId(1);
+        order.setOrderId("ORD-2021-121121");
+        order.setDate("2021-12-15 17:15:00");
+        order.setAmount(6000.00);
+
+        orderList.add(order);
+        ordersAdapter.setOrderList(orderList);
+        ordersAdapter.notifyDataSetChanged();
     }
 }

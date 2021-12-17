@@ -2,13 +2,25 @@ package com.creativelabs.myshopping.fragments;
 
 import android.os.Bundle;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
 import com.creativelabs.myshopping.R;
+import com.creativelabs.myshopping.adapters.OrdersAdapter;
+import com.creativelabs.myshopping.adapters.ShoppingCartAdapter;
+import com.creativelabs.myshopping.entity.Order;
+import com.creativelabs.myshopping.entity.ShoppingCart;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -57,10 +69,56 @@ public class ShoppingCartFragment extends Fragment {
         }
     }
 
+    RecyclerView rvShoppingCart;
+    ConstraintLayout vNotLoggedIn;
+    ShoppingCartAdapter shoppingCartAdapter;
+    List<ShoppingCart> shoppingCartList;
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_cart, container, false);
+        View view = inflater.inflate(R.layout.fragment_cart, container, false);
+
+        vNotLoggedIn = view.findViewById(R.id.vNotLoggedIn);
+        rvShoppingCart = view.findViewById(R.id.rvShoppingCart);
+
+        if (isLoggedIn()) {
+            rvShoppingCart.setVisibility(View.VISIBLE);
+            vNotLoggedIn.setVisibility(View.GONE);
+        } else {
+            rvShoppingCart.setVisibility(View.GONE);
+            vNotLoggedIn.setVisibility(View.VISIBLE);
+        }
+
+        return view;
+    }
+
+    @Override
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+
+        shoppingCartAdapter = new ShoppingCartAdapter();
+        rvShoppingCart.setLayoutManager(new LinearLayoutManager(getContext()));
+
+        rvShoppingCart.setAdapter(shoppingCartAdapter);
+        shoppingCartList = new ArrayList<>();
+
+        ShoppingCart cart = new ShoppingCart();
+        cart.setId(1);
+        cart.setItemId(1);
+        cart.setItemName("IPhone 13 Pro");
+        cart.setQuantity(1);
+        cart.setPrice(430000);
+        cart.setImage("https://cdn.vox-cdn.com/thumbor/YUxaZipSZU0TKu9chivFf16rbUM=/1400x1400/filters:format(jpeg)/cdn.vox-cdn.com/uploads/chorus_asset/file/22863288/vpavic_210916_untitled_0058.jpg");
+
+        shoppingCartList.add(cart);
+
+        shoppingCartAdapter.setShoppingCartList(shoppingCartList);
+        shoppingCartAdapter.notifyDataSetChanged();
+    }
+
+    private boolean isLoggedIn() {
+        return true;
     }
 }
