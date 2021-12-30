@@ -15,6 +15,7 @@ import android.widget.Button;
 import android.widget.Toast;
 
 import com.creativelabs.myshopping.R;
+import com.creativelabs.myshopping.utils.SharedPref;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
 import com.mrntlu.toastie.Toastie;
@@ -162,6 +163,6 @@ public class MyAccountFragment extends Fragment {
     }
 
     private boolean isLoggedIn() {
-        return true;
+        return SharedPref.getIsLoggedIn(getContext());
     }
 }

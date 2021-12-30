@@ -7,4 +7,18 @@
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="first_name">First Name</string>
+    <string name="login_text">Login</string>
+    <string name="this_is_a_image_for_login">Login Imae</string>
+    <string name="username">Username</string>
+    <string name="password">Password</string>
+    <string name="sign_in">Sign In</string>
+    <string name="forgot_password">Forgot Password</string>
+    <string name="create_new_account">Create new account</string>
+    <string name="register_now">Register Now</string>
+    <string name="last_name">Last Name</string>
+    <string name="email">Email</string>
+    <string name="confirm_password">Confirm Password</string>
+    <string name="reset_password">Reset Password</string>
+    <string name="verification_code">Verification Code</string>
+    <string name="new_password">New Password</string>
 </resources>

@@ -1,5 +1,6 @@
 package com.creativelabs.myshopping.fragments;
 
+import android.content.Intent;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -11,9 +12,12 @@ import androidx.viewpager2.widget.ViewPager2;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 
+import com.creativelabs.myshopping.LoginActivity;
 import com.creativelabs.myshopping.R;
 import com.creativelabs.myshopping.adapters.OrderPageAdapter;
+import com.creativelabs.myshopping.utils.SharedPref;
 import com.google.android.material.tabs.TabLayout;
 import com.google.android.material.tabs.TabLayoutMediator;
 
@@ -69,6 +73,7 @@ public class OrdersFragment extends Fragment {
     TabLayout tlOrderTabs;
     ConstraintLayout vNotLoggedIn;
     private String[] titleArray = {"All Orders", "Completed", "Cancelled"};
+    Button btnGoLogin;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -89,6 +94,13 @@ public class OrdersFragment extends Fragment {
             vNotLoggedIn.setVisibility(View.VISIBLE);
         }
 
+        btnGoLogin = view.findViewById(R.id.btnGoLogin);
+
+        btnGoLogin.setOnClickListener(v -> {
+            Intent loginIntent  = new Intent(getContext(), LoginActivity.class);
+            startActivity(loginIntent);
+        });
+
         return view;
     }
 
@@ -104,6 +116,6 @@ public class OrdersFragment extends Fragment {
     }
 
     private boolean isLoggedIn() {
-        return false;
+        return SharedPref.getIsLoggedIn(getContext());
     }
 }

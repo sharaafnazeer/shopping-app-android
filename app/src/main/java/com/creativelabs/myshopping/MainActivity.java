@@ -5,6 +5,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.view.MenuItem;
 import android.widget.Button;
 
@@ -12,6 +13,7 @@ import com.creativelabs.myshopping.fragments.HomeFragment;
 import com.creativelabs.myshopping.fragments.MyAccountFragment;
 import com.creativelabs.myshopping.fragments.OrdersFragment;
 import com.creativelabs.myshopping.fragments.ShoppingCartFragment;
+import com.creativelabs.myshopping.utils.SharedPref;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 public class MainActivity extends AppCompatActivity implements BottomNavigationView.OnNavigationItemSelectedListener {
@@ -27,6 +29,10 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationV
         showHomeView();
 
         bnVMain.setOnNavigationItemSelectedListener(this);
+
+        String token = SharedPref.getToken(this);
+
+        Log.d("TOKEN", SharedPref.getToken(this));
     }
 
     private void showHomeView() {

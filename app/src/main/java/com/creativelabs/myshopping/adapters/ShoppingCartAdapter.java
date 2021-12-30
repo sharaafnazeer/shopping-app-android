@@ -1,29 +1,56 @@
 package com.creativelabs.myshopping.adapters;
 
+import android.app.ProgressDialog;
+import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.creativelabs.myshopping.R;
+import com.creativelabs.myshopping.entity.ActionResponse;
+import com.creativelabs.myshopping.entity.Cart;
 import com.creativelabs.myshopping.entity.ShoppingCart;
+import com.creativelabs.myshopping.utils.ApiInterface;
+import com.creativelabs.myshopping.utils.NetworkService;
+import com.creativelabs.myshopping.utils.SharedPref;
+import com.mrntlu.toastie.Toastie;
 import com.squareup.picasso.Picasso;
+import com.travijuu.numberpicker.library.Enums.ActionEnum;
+import com.travijuu.numberpicker.library.Interface.ValueChangedListener;
 import com.travijuu.numberpicker.library.NumberPicker;
 
 import java.util.ArrayList;
 import java.util.List;
 
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+
 public class ShoppingCartAdapter extends RecyclerView.Adapter<ShoppingCartAdapter.ViewHolder> {
 
-    private List<ShoppingCart> shoppingCartList = new ArrayList<>();
+    private List<Cart> shoppingCartList = new ArrayList<>();
+    ApiInterface apiInterface;
+    Context context;
+    ProgressDialog progressDialog;
 
-    public void setShoppingCartList(List<ShoppingCart> shoppingCartList) {
+    public ShoppingCartAdapter(Context context) {
+        this.context = context;
+    }
+
+    public ShoppingCartAdapter() {
+    }
+
+    public void setShoppingCartList(List<Cart> shoppingCartList) {
         this.shoppingCartList = shoppingCartList;
+        apiInterface = NetworkService.getInstance(SharedPref.getToken(this.context))
+                .getService(ApiInterface.class);
     }
 
     @NonNull
@@ -36,10 +63,10 @@ public class ShoppingCartAdapter extends RecyclerView.Adapter<ShoppingCartAdapte
     @Override
     public void onBindViewHolder(@NonNull ShoppingCartAdapter.ViewHolder holder, int position) {
 
-        ShoppingCart cart = shoppingCartList.get(position);
+        Cart cart = shoppingCartList.get(position);
 
-        holder.tvItemName.setText(cart.getItemName());
-        holder.tvItemPrice.setText(String.format("LKR. %s", cart.getPrice()));
+        holder.tvItemName.setText(cart.getProductName());
+        holder.tvItemPrice.setText(String.format("LKR. %s", cart.getTotalPrice()));
         holder.npQuantity.setValue(cart.getQuantity());
 
         // Handle with Picasso
@@ -49,6 +76,63 @@ public class ShoppingCartAdapter extends RecyclerView.Adapter<ShoppingCartAdapte
                 .centerCrop()
                 .error(R.drawable.ic_baseline_shopping_bag_24)
                 .into(holder.ivCartItem);
+
+        holder.npQuantity.setValueChangedListener(new ValueChangedListener() {
+            @Override
+            public void valueChanged(int value, ActionEnum action) {
+
+                progressDialog =  new ProgressDialog(context);
+                progressDialog.setCancelable(true);
+                progressDialog.setTitle("Please wait");
+                progressDialog.setMessage("I am updating your data");
+                progressDialog.show();
+
+                cart.setQuantity(value);
+
+                apiInterface.updateCart(cart.getId(), cart)
+                        .enqueue(new Callback<ActionResponse>() {
+                            @Override
+                            public void onResponse(@NonNull Call<ActionResponse> call, @NonNull Response<ActionResponse> response) {
+                                assert response.body() != null;
+                                Toastie.topSuccess(context, response.body().getMessage(), Toast.LENGTH_LONG).show();
+                                progressDialog.dismiss();
+                            }
+
+                            @Override
+                            public void onFailure(@NonNull Call<ActionResponse> call, Throwable t) {
+                                progressDialog.dismiss();
+                            }
+                        });
+
+                double totalPrice = cart.getProductPrice() * value;
+
+                holder.tvItemPrice.setText(String.format("LKR. %s", totalPrice));
+            }
+        });
+
+        holder.ibRemoveCartItem.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                progressDialog =  new ProgressDialog(context);
+                progressDialog.setCancelable(true);
+                progressDialog.setTitle("Please wait");
+                progressDialog.setMessage("I am updating your data");
+                progressDialog.show();
+                apiInterface.deleteCart(cart.getId()).enqueue(new Callback<ActionResponse>() {
+                    @Override
+                    public void onResponse(@NonNull Call<ActionResponse> call, @NonNull Response<ActionResponse> response) {
+                        assert response.body() != null;
+                        Toastie.topSuccess(context, response.body().getMessage(), Toast.LENGTH_LONG).show();
+                        progressDialog.dismiss();
+                    }
+
+                    @Override
+                    public void onFailure(@NonNull Call<ActionResponse> call, @NonNull Throwable t) {
+                        progressDialog.dismiss();
+                    }
+                });
+            }
+        });
     }
 
     @Override
