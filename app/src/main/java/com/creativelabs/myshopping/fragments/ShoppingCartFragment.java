@@ -18,6 +18,7 @@ import com.creativelabs.myshopping.adapters.OrdersAdapter;
 import com.creativelabs.myshopping.adapters.ShoppingCartAdapter;
 import com.creativelabs.myshopping.entity.Order;
 import com.creativelabs.myshopping.entity.ShoppingCart;
+import com.creativelabs.myshopping.utils.SharedPref;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -119,6 +120,6 @@ public class ShoppingCartFragment extends Fragment {
     }
 
     private boolean isLoggedIn() {
-        return true;
+        return SharedPref.getIsLoggedIn(getContext());
     }
 }

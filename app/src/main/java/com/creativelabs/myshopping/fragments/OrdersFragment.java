@@ -14,6 +14,7 @@ import android.view.ViewGroup;
 
 import com.creativelabs.myshopping.R;
 import com.creativelabs.myshopping.adapters.OrderPageAdapter;
+import com.creativelabs.myshopping.utils.SharedPref;
 import com.google.android.material.tabs.TabLayout;
 import com.google.android.material.tabs.TabLayoutMediator;
 
@@ -104,6 +105,6 @@ public class OrdersFragment extends Fragment {
     }
 
     private boolean isLoggedIn() {
-        return false;
+        return SharedPref.getIsLoggedIn(getContext());
     }
 }
