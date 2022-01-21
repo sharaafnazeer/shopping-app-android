@@ -1,5 +1,6 @@
 package com.creativelabs.myshopping.utils;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.SharedPreferences;
 
@@ -7,6 +8,7 @@ public class SharedPref {
     private SharedPreferences preferences;
 
 
+    @SuppressLint("WrongConstant")
     public static SharedPreferences getPreferences(Context context) {
         return context.getSharedPreferences(Constants.PREF_NAME, Constants.PRIVATE_MODE);
     }
@@ -19,11 +21,14 @@ public class SharedPref {
         return getPreferences(context).getBoolean(Constants.IS_LOGGED_IN, false);
     }
 
-    public static void setServiceStarted(Context context, boolean isLoggedIn) {
-        getPreferences(context).edit().putBoolean(Constants.IS_SERVICE, isLoggedIn).apply();
+    public static void setToken(Context context, String token) {
+        getPreferences(context).edit().putString(Constants.TOKEN, token).apply();
     }
 
-    public static boolean getServiceStarted(Context context) {
-        return getPreferences(context).getBoolean(Constants.IS_SERVICE, false);
+    public static String getToken(Context context) {
+        return getPreferences(context).getString(Constants.TOKEN, null);
     }
+
+
+
 }

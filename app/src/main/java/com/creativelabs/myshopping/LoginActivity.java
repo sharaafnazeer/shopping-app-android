@@ -7,18 +7,27 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
+import android.util.Log;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.creativelabs.myshopping.entity.Auth;
+import com.creativelabs.myshopping.entity.AuthResponse;
+import com.creativelabs.myshopping.utils.ApiInterface;
+import com.creativelabs.myshopping.utils.NetworkService;
 import com.creativelabs.myshopping.utils.SharedPref;
 import com.mrntlu.toastie.Toastie;
 
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.schedulers.Schedulers;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+
 public class LoginActivity extends AppCompatActivity {
 
-    String userName = "admin";
-    String password = "qwerty";
 
     // Java int string float char boolean
     // 2 Edit Text, Button 2, TextView
@@ -28,6 +37,8 @@ public class LoginActivity extends AppCompatActivity {
     Button btnLogin;
     Button btnNewAccount;
     TextView tvForgotPassword;
+
+    ApiInterface apiInterface;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -50,10 +61,12 @@ public class LoginActivity extends AppCompatActivity {
             String pass = etPassword.getText().toString();
 
             if (validate(uname, pass)) {
-                SharedPref.setIsLoggedIn(this, true);
-                Intent homeIntent = new Intent(this, MainActivity.class);
-                startActivity(homeIntent);
-                finish();
+
+                Auth auth = new Auth();
+                auth.setEmail(uname);
+                auth.setPassword(pass);
+
+                login(auth);
             }
         });
 
@@ -73,6 +86,8 @@ public class LoginActivity extends AppCompatActivity {
                 startActivity(forgotIntent);
             }
         });
+
+        apiInterface = NetworkService.getInstance(SharedPref.getToken(this)).getService(ApiInterface.class);
     }
 
     private boolean validate(String uname, String pass) {
@@ -85,11 +100,31 @@ public class LoginActivity extends AppCompatActivity {
         } else if (TextUtils.isEmpty(pass)) {
             Toastie.topError(this, "Password is empty", Toast.LENGTH_LONG).show();
             return false;
-        } else if (!(userName.equals(uname) && password.equals(pass))) {
-            Toastie.topError(this, "Invalid Username or Password", Toast.LENGTH_LONG).show();
-            return false;
         }
         return true;
+    }
+
+    private void login(Auth auth) {
+
+        apiInterface.login(auth)
+                .enqueue(new Callback<AuthResponse>() {
+                    @Override
+                    public void onResponse(Call<AuthResponse> call, Response<AuthResponse> response) {
+                        SharedPref.setIsLoggedIn(getApplicationContext(), true);
+                        assert response.body() != null;
+                        SharedPref.setToken(getApplicationContext(), response.body().getJwt());
+                        Intent homeIntent = new Intent(getApplicationContext(), MainActivity.class);
+                        startActivity(homeIntent);
+                        finish();
+                        Log.d("LOGIN", "SUCCESS");
+                    }
+
+                    @Override
+                    public void onFailure(Call<AuthResponse> call, Throwable t) {
+                        Log.d("LOGIN", "FAILED");
+                    }
+                });
+
     }
 
 

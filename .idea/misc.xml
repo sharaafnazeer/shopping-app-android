@@ -9,6 +9,7 @@
         <entry key="app/src/main/res/layout/fragment_cart.xml" value="0.19322916666666667" />
         <entry key="app/src/main/res/layout/fragment_my_account.xml" value="0.19322916666666667" />
         <entry key="app/src/main/res/layout/layout_cart_item.xml" value="0.19322916666666667" />
+        <entry key="app/src/main/res/layout/layout_not_loggedin.xml" value="0.1" />
         <entry key="app/src/main/res/layout/layout_one_order.xml" value="0.19322916666666667" />
       </map>
     </option>

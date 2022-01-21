@@ -1,5 +1,8 @@
 package com.creativelabs.myshopping.fragments;
 
+import android.annotation.SuppressLint;
+import android.app.ProgressDialog;
+import android.content.Intent;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -12,16 +15,25 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 
+import com.creativelabs.myshopping.LoginActivity;
 import com.creativelabs.myshopping.R;
 import com.creativelabs.myshopping.adapters.OrdersAdapter;
 import com.creativelabs.myshopping.adapters.ShoppingCartAdapter;
+import com.creativelabs.myshopping.entity.Cart;
 import com.creativelabs.myshopping.entity.Order;
 import com.creativelabs.myshopping.entity.ShoppingCart;
+import com.creativelabs.myshopping.utils.ApiInterface;
+import com.creativelabs.myshopping.utils.NetworkService;
 import com.creativelabs.myshopping.utils.SharedPref;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -73,7 +85,11 @@ public class ShoppingCartFragment extends Fragment {
     RecyclerView rvShoppingCart;
     ConstraintLayout vNotLoggedIn;
     ShoppingCartAdapter shoppingCartAdapter;
-    List<ShoppingCart> shoppingCartList;
+    List<Cart> shoppingCartList;
+    Button btnGoLogin;
+    ApiInterface apiInterface;
+
+    ProgressDialog progressDialog;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -92,6 +108,17 @@ public class ShoppingCartFragment extends Fragment {
             vNotLoggedIn.setVisibility(View.VISIBLE);
         }
 
+        btnGoLogin = view.findViewById(R.id.btnGoLogin);
+
+        btnGoLogin.setOnClickListener(v -> {
+            Intent loginIntent = new Intent(getContext(), LoginActivity.class);
+            startActivity(loginIntent);
+        });
+
+        apiInterface = NetworkService.getInstance(SharedPref.getToken(getContext()))
+                .getService(ApiInterface.class);
+
+
         return view;
     }
 
@@ -99,27 +126,41 @@ public class ShoppingCartFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        shoppingCartAdapter = new ShoppingCartAdapter();
+        shoppingCartAdapter = new ShoppingCartAdapter(getContext());
         rvShoppingCart.setLayoutManager(new LinearLayoutManager(getContext()));
 
         rvShoppingCart.setAdapter(shoppingCartAdapter);
         shoppingCartList = new ArrayList<>();
 
-        ShoppingCart cart = new ShoppingCart();
-        cart.setId(1);
-        cart.setItemId(1);
-        cart.setItemName("IPhone 13 Pro");
-        cart.setQuantity(1);
-        cart.setPrice(430000);
-        cart.setImage("https://cdn.vox-cdn.com/thumbor/YUxaZipSZU0TKu9chivFf16rbUM=/1400x1400/filters:format(jpeg)/cdn.vox-cdn.com/uploads/chorus_asset/file/22863288/vpavic_210916_untitled_0058.jpg");
-
-        shoppingCartList.add(cart);
-
         shoppingCartAdapter.setShoppingCartList(shoppingCartList);
-        shoppingCartAdapter.notifyDataSetChanged();
+        getCarts();
     }
 
     private boolean isLoggedIn() {
         return SharedPref.getIsLoggedIn(getContext());
+    }
+
+    private void getCarts() {
+        progressDialog =  new ProgressDialog(getContext());
+        progressDialog.setCancelable(true);
+        progressDialog.setTitle("Please wait");
+        progressDialog.setMessage("I am fetching your data");
+        progressDialog.show();
+        apiInterface.getAllCarts()
+                .enqueue(new Callback<List<Cart>>() {
+                    @SuppressLint("NotifyDataSetChanged")
+                    @Override
+                    public void onResponse(@NonNull Call<List<Cart>> call, @NonNull Response<List<Cart>> response) {
+                        shoppingCartList = response.body();
+                        shoppingCartAdapter.setShoppingCartList(shoppingCartList);
+                        shoppingCartAdapter.notifyDataSetChanged();
+                        progressDialog.dismiss();
+                    }
+
+                    @Override
+                    public void onFailure(@NonNull Call<List<Cart>> call, @NonNull Throwable t) {
+                        progressDialog.dismiss();
+                    }
+                });
     }
 }
