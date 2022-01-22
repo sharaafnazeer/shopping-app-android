@@ -36,7 +36,7 @@ public interface ApiInterface {
     Call<List<Product>> getAllProducts(@Query("categoryId") int categoryId);
 
     @GET("product/{id}")
-    Call<List<Product>> getOneProduct(@Path("id") int productId);
+    Call<Product> getOneProduct(@Path("id") int productId);
 
     // Cart Related
 
@@ -56,6 +56,9 @@ public interface ApiInterface {
 
     @GET("order")
     Call<List<Order>> getAllOrders(@Query("status") int status);
+
+    @POST("order")
+    Call<ActionResponse> saveOrder();
 
     // Auth Related
 

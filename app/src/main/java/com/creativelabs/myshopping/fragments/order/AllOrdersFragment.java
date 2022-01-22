@@ -1,5 +1,7 @@
 package com.creativelabs.myshopping.fragments.order;
 
+import android.annotation.SuppressLint;
+import android.app.ProgressDialog;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -14,10 +16,18 @@ import android.view.ViewGroup;
 
 import com.creativelabs.myshopping.R;
 import com.creativelabs.myshopping.adapters.OrdersAdapter;
+import com.creativelabs.myshopping.entity.Cart;
 import com.creativelabs.myshopping.entity.Order;
+import com.creativelabs.myshopping.utils.ApiInterface;
+import com.creativelabs.myshopping.utils.NetworkService;
+import com.creativelabs.myshopping.utils.SharedPref;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -70,12 +80,20 @@ public class AllOrdersFragment extends Fragment {
     OrdersAdapter ordersAdapter;
     List<Order> orderList;
 
+    ApiInterface apiInterface;
+
+    ProgressDialog progressDialog;
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_all_orders, container, false);
         rvAllOrders = view.findViewById(R.id.rvAllOrders);
+
+        apiInterface = NetworkService.getInstance(SharedPref.getToken(getContext()))
+                .getService(ApiInterface.class);
+
 
         return view;
     }
@@ -89,16 +107,31 @@ public class AllOrdersFragment extends Fragment {
 
         rvAllOrders.setAdapter(ordersAdapter);
         orderList = new ArrayList<>();
-
-        Order order = new Order();
-        order.setId(1);
-        order.setOrderId("ORD-2021-121121");
-        order.setDate("2021-12-15 17:15:00");
-        order.setAmount(6000.00);
-        order.setRating(4);
-
-        orderList.add(order);
         ordersAdapter.setOrderList(orderList);
-        ordersAdapter.notifyDataSetChanged();
+
+        getAllOrders();
+    }
+
+    private void getAllOrders() {
+        progressDialog =  new ProgressDialog(getContext());
+        progressDialog.setCancelable(true);
+        progressDialog.setTitle("Please wait");
+        progressDialog.setMessage("I am fetching your data");
+        progressDialog.show();
+        apiInterface.getAllOrders(-1)
+                .enqueue(new Callback<List<Order>>() {
+                    @Override
+                    public void onResponse(@NonNull Call<List<Order>> call, @NonNull Response<List<Order>> response) {
+                        orderList = response.body();
+                        ordersAdapter.setOrderList(orderList);
+                        ordersAdapter.notifyDataSetChanged();
+                        progressDialog.dismiss();
+                    }
+
+                    @Override
+                    public void onFailure(@NonNull Call<List<Order>> call, @NonNull Throwable t) {
+                        progressDialog.dismiss();
+                    }
+                });
     }
 }

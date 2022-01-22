@@ -16,7 +16,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.creativelabs.myshopping.R;
 import com.creativelabs.myshopping.entity.ActionResponse;
 import com.creativelabs.myshopping.entity.Cart;
-import com.creativelabs.myshopping.entity.ShoppingCart;
+import com.creativelabs.myshopping.utils.ActionHandlerInterface;
 import com.creativelabs.myshopping.utils.ApiInterface;
 import com.creativelabs.myshopping.utils.NetworkService;
 import com.creativelabs.myshopping.utils.SharedPref;
@@ -40,8 +40,11 @@ public class ShoppingCartAdapter extends RecyclerView.Adapter<ShoppingCartAdapte
     Context context;
     ProgressDialog progressDialog;
 
-    public ShoppingCartAdapter(Context context) {
+    ActionHandlerInterface actionHandlerInterface;
+
+    public ShoppingCartAdapter(Context context, ActionHandlerInterface actionHandlerInterface) {
         this.context = context;
+        this.actionHandlerInterface = actionHandlerInterface;
     }
 
     public ShoppingCartAdapter() {
@@ -72,8 +75,6 @@ public class ShoppingCartAdapter extends RecyclerView.Adapter<ShoppingCartAdapte
         // Handle with Picasso
         Picasso.get()
                 .load(cart.getImage())
-                .resize(50, 50)
-                .centerCrop()
                 .error(R.drawable.ic_baseline_shopping_bag_24)
                 .into(holder.ivCartItem);
 
@@ -124,6 +125,8 @@ public class ShoppingCartAdapter extends RecyclerView.Adapter<ShoppingCartAdapte
                         assert response.body() != null;
                         Toastie.topSuccess(context, response.body().getMessage(), Toast.LENGTH_LONG).show();
                         progressDialog.dismiss();
+
+                        actionHandlerInterface.updateInterface();
                     }
 
                     @Override
@@ -155,7 +158,7 @@ public class ShoppingCartAdapter extends RecyclerView.Adapter<ShoppingCartAdapte
             tvItemName = itemView.findViewById(R.id.tvItemName);
             tvItemPrice = itemView.findViewById(R.id.tvItemPrice);
             ibRemoveCartItem = itemView.findViewById(R.id.ibRemoveCartItem);
-            npQuantity = itemView.findViewById(R.id.npQuantity);
+            npQuantity = itemView.findViewById(R.id.npProductOneQuantity);
         }
     }
 }

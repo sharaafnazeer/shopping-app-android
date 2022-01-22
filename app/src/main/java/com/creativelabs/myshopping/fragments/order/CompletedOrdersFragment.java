@@ -92,9 +92,9 @@ public class CompletedOrdersFragment extends Fragment {
 
         Order order = new Order();
         order.setId(1);
-        order.setOrderId("ORD-2021-121121");
-        order.setDate("2021-12-15 17:15:00");
-        order.setAmount(6000.00);
+        order.setCode("ORD-2021-121121");
+        order.setOrderDate("2021-12-15 17:15:00");
+        order.setTotalAmount(6000.00);
 
         orderList.add(order);
         ordersAdapter.setOrderList(orderList);

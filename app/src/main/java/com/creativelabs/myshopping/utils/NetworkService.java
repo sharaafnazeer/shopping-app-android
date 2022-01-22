@@ -14,7 +14,7 @@ import retrofit2.converter.gson.GsonConverterFactory;
 
 public class NetworkService {
 
-    public static final String BASE_URL = "https://bc03-112-134-186-212.ngrok.io/api/";
+    public static final String BASE_URL = "https://fb20-2402-4000-2280-19e8-669d-3159-6058-5be8.ngrok.io/api/";
     public String accessToken;
 
     private NetworkService() {

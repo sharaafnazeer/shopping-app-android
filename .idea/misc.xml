@@ -3,14 +3,21 @@
   <component name="DesignSurface">
     <option name="filePathToZoomLevelMap">
       <map>
+        <entry key="../../../../../layout/custom_preview.xml" value="0.3651041666666667" />
+        <entry key="app/src/main/res/layout-w1240dp/content_scrolling.xml" value="0.12416331994645248" />
+        <entry key="app/src/main/res/layout-w936dp/content_scrolling.xml" value="0.144921875" />
         <entry key="app/src/main/res/layout/activity_forgot_password.xml" value="0.19322916666666667" />
         <entry key="app/src/main/res/layout/activity_login.xml" value="0.1" />
+        <entry key="app/src/main/res/layout/activity_product.xml" value="0.35" />
+        <entry key="app/src/main/res/layout/activity_products.xml" value="0.35" />
         <entry key="app/src/main/res/layout/activity_register.xml" value="0.178125" />
+        <entry key="app/src/main/res/layout/content_scrolling.xml" value="0.3333333333333333" />
         <entry key="app/src/main/res/layout/fragment_cart.xml" value="0.19322916666666667" />
         <entry key="app/src/main/res/layout/fragment_my_account.xml" value="0.19322916666666667" />
         <entry key="app/src/main/res/layout/layout_cart_item.xml" value="0.19322916666666667" />
         <entry key="app/src/main/res/layout/layout_not_loggedin.xml" value="0.1" />
         <entry key="app/src/main/res/layout/layout_one_order.xml" value="0.19322916666666667" />
+        <entry key="app/src/main/res/layout/layout_one_product.xml" value="0.3494791666666667" />
       </map>
     </option>
   </component>

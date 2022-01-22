@@ -16,17 +16,21 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.Toast;
 
 import com.creativelabs.myshopping.LoginActivity;
 import com.creativelabs.myshopping.R;
 import com.creativelabs.myshopping.adapters.OrdersAdapter;
 import com.creativelabs.myshopping.adapters.ShoppingCartAdapter;
+import com.creativelabs.myshopping.entity.ActionResponse;
 import com.creativelabs.myshopping.entity.Cart;
 import com.creativelabs.myshopping.entity.Order;
 import com.creativelabs.myshopping.entity.ShoppingCart;
+import com.creativelabs.myshopping.utils.ActionHandlerInterface;
 import com.creativelabs.myshopping.utils.ApiInterface;
 import com.creativelabs.myshopping.utils.NetworkService;
 import com.creativelabs.myshopping.utils.SharedPref;
+import com.mrntlu.toastie.Toastie;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -40,7 +44,7 @@ import retrofit2.Response;
  * Use the {@link ShoppingCartFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class ShoppingCartFragment extends Fragment {
+public class ShoppingCartFragment extends Fragment implements ActionHandlerInterface {
 
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -86,7 +90,7 @@ public class ShoppingCartFragment extends Fragment {
     ConstraintLayout vNotLoggedIn;
     ShoppingCartAdapter shoppingCartAdapter;
     List<Cart> shoppingCartList;
-    Button btnGoLogin;
+    Button btnGoLogin, btnCheckout;
     ApiInterface apiInterface;
 
     ProgressDialog progressDialog;
@@ -99,6 +103,7 @@ public class ShoppingCartFragment extends Fragment {
 
         vNotLoggedIn = view.findViewById(R.id.vNotLoggedIn);
         rvShoppingCart = view.findViewById(R.id.rvShoppingCart);
+        btnCheckout = view.findViewById(R.id.btnCheckout);
 
         if (isLoggedIn()) {
             rvShoppingCart.setVisibility(View.VISIBLE);
@@ -118,6 +123,9 @@ public class ShoppingCartFragment extends Fragment {
         apiInterface = NetworkService.getInstance(SharedPref.getToken(getContext()))
                 .getService(ApiInterface.class);
 
+        btnCheckout.setOnClickListener(v -> {
+            checkout();
+        });
 
         return view;
     }
@@ -126,7 +134,7 @@ public class ShoppingCartFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        shoppingCartAdapter = new ShoppingCartAdapter(getContext());
+        shoppingCartAdapter = new ShoppingCartAdapter(getContext(), this);
         rvShoppingCart.setLayoutManager(new LinearLayoutManager(getContext()));
 
         rvShoppingCart.setAdapter(shoppingCartAdapter);
@@ -154,6 +162,9 @@ public class ShoppingCartFragment extends Fragment {
                         shoppingCartList = response.body();
                         shoppingCartAdapter.setShoppingCartList(shoppingCartList);
                         shoppingCartAdapter.notifyDataSetChanged();
+                        if (shoppingCartList.size() > 0) {
+                            btnCheckout.setVisibility(View.VISIBLE);
+                        }
                         progressDialog.dismiss();
                     }
 
@@ -162,5 +173,33 @@ public class ShoppingCartFragment extends Fragment {
                         progressDialog.dismiss();
                     }
                 });
+    }
+
+    private void checkout() {
+        progressDialog =  new ProgressDialog(getContext());
+        progressDialog.setCancelable(true);
+        progressDialog.setTitle("Please wait");
+        progressDialog.setMessage("I am fetching your data");
+        progressDialog.show();
+        apiInterface.saveOrder()
+                .enqueue(new Callback<ActionResponse>() {
+                    @Override
+                    public void onResponse(@NonNull Call<ActionResponse> call, @NonNull Response<ActionResponse> response) {
+                        ActionResponse message = response.body();
+                        assert message != null;
+                        Toastie.topSuccess(getContext(), message.getMessage(), Toast.LENGTH_LONG).show();
+                        progressDialog.dismiss();
+                    }
+
+                    @Override
+                    public void onFailure(@NonNull Call<ActionResponse> call, @NonNull Throwable t) {
+                        progressDialog.dismiss();
+                    }
+                });
+    }
+
+    @Override
+    public void updateInterface() {
+        getCarts();
     }
 }

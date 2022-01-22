@@ -32,7 +32,7 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationV
 
         String token = SharedPref.getToken(this);
 
-        Log.d("TOKEN", SharedPref.getToken(this));
+        //Log.d("TOKEN", SharedPref.getToken(this));
     }
 
     private void showHomeView() {

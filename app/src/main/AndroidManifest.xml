@@ -12,6 +12,16 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.MyShopping">
         <activity
+            android:name=".ProductActivity"
+            android:exported="false"
+            android:label="@string/title_activity_product"
+            android:theme="@style/Theme.MyShopping.NoActionBar" />
+        <activity
+            android:name=".ProductsActivity"
+            android:exported="true">
+
+        </activity>
+        <activity
             android:name=".ForgotPasswordActivity"
             android:exported="true" />
         <activity
@@ -20,7 +30,9 @@
         <activity
             android:name=".LoginActivity"
             android:exported="true" />
-        <activity android:name=".MainActivity">
+        <activity
+            android:name=".MainActivity"
+            android:exported="true" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
