@@ -20,8 +20,6 @@ import com.creativelabs.myshopping.utils.NetworkService;
 import com.creativelabs.myshopping.utils.SharedPref;
 import com.mrntlu.toastie.Toastie;
 
-import io.reactivex.android.schedulers.AndroidSchedulers;
-import io.reactivex.schedulers.Schedulers;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -113,10 +111,11 @@ public class LoginActivity extends AppCompatActivity {
                         SharedPref.setIsLoggedIn(getApplicationContext(), true);
                         assert response.body() != null;
                         SharedPref.setToken(getApplicationContext(), response.body().getJwt());
-                        Intent homeIntent = new Intent(getApplicationContext(), MainActivity.class);
-                        startActivity(homeIntent);
+//                        Intent homeIntent = new Intent(getApplicationContext(), MainActivity.class);
+//                        startActivity(homeIntent);
                         finish();
                         Log.d("LOGIN", "SUCCESS");
+                        Log.d("LOGIN", SharedPref.getToken(getApplicationContext()));
                     }
 
                     @Override

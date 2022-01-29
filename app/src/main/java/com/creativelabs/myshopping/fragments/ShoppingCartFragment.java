@@ -141,7 +141,19 @@ public class ShoppingCartFragment extends Fragment implements ActionHandlerInter
         shoppingCartList = new ArrayList<>();
 
         shoppingCartAdapter.setShoppingCartList(shoppingCartList);
-        getCarts();
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        if (isLoggedIn()) {
+            rvShoppingCart.setVisibility(View.VISIBLE);
+            vNotLoggedIn.setVisibility(View.GONE);
+            getCarts();
+        } else {
+            rvShoppingCart.setVisibility(View.GONE);
+            vNotLoggedIn.setVisibility(View.VISIBLE);
+        }
     }
 
     private boolean isLoggedIn() {

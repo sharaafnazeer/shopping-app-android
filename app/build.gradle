@@ -60,10 +60,8 @@ dependencies {
     //okhttp3
     implementation 'com.squareup.okhttp3:okhttp:3.13.1'
     implementation 'com.squareup.okhttp3:logging-interceptor:3.13.1'
-    //RxJava
-    implementation 'io.reactivex.rxjava2:rxandroid:2.0.1'
-    implementation 'io.reactivex.rxjava2:rxjava:2.1.10'
-    implementation 'com.squareup.retrofit2:adapter-rxjava2:2.2.0'
+
+    implementation 'com.synnapps:carouselview:0.1.5'
 
 
     implementation "androidx.multidex:multidex:2.0.1"

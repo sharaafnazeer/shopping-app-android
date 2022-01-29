@@ -9,6 +9,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.annotation.SuppressLint;
 import android.app.ProgressDialog;
 import android.os.Bundle;
+import android.util.Log;
 
 import com.creativelabs.myshopping.adapters.ProductsAdapter;
 import com.creativelabs.myshopping.entity.Product;
@@ -33,6 +34,7 @@ public class ProductsActivity extends AppCompatActivity {
     ApiInterface apiInterface;
 
     ProgressDialog progressDialog;
+    private int categoryId;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -41,6 +43,8 @@ public class ProductsActivity extends AppCompatActivity {
 
         apiInterface = NetworkService.getInstance(SharedPref.getToken(this))
                 .getService(ApiInterface.class);
+
+        categoryId = getIntent().getIntExtra("CATEGORY_ID", -1);
 
         rvProducts = findViewById(R.id.rvProducts);
 
@@ -52,7 +56,8 @@ public class ProductsActivity extends AppCompatActivity {
         productList = new ArrayList<>();
 
         productsAdapter.setProductList(productList);
-        getProducts();
+        if (categoryId > 0)
+            getProducts();
 
     }
 
@@ -62,7 +67,7 @@ public class ProductsActivity extends AppCompatActivity {
         progressDialog.setTitle("Please wait");
         progressDialog.setMessage("I am fetching your data");
         progressDialog.show();
-        apiInterface.getAllProducts(1)
+        apiInterface.getAllProducts(categoryId)
                 .enqueue(new Callback<List<Product>>() {
                     @SuppressLint("NotifyDataSetChanged")
                     @Override
@@ -71,6 +76,7 @@ public class ProductsActivity extends AppCompatActivity {
                         productsAdapter.setProductList(productList);
                         productsAdapter.notifyDataSetChanged();
                         progressDialog.dismiss();
+
                     }
 
                     @Override

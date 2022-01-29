@@ -67,4 +67,7 @@ public interface ApiInterface {
 
     @POST("auth/register")
     Call<User> register(@Body User user);
+
+    @POST("auth/is-authorized")
+    Call<ActionResponse> isAuthorized();
 }

@@ -17,6 +17,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.widget.NestedScrollView;
 
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
@@ -81,12 +82,19 @@ public class ProductActivity extends AppCompatActivity {
 
         btnAddToCart.setOnClickListener(view -> {
 
-            int quantity = npProductOneQuantity.getValue();
+            if (isLoggedIn()) {
+                int quantity = npProductOneQuantity.getValue();
 
-            Cart cart = new Cart();
-            cart.setQuantity(quantity);
-            cart.setProductId(product.getId());
-            addToCart(cart);
+                Cart cart = new Cart();
+                cart.setQuantity(quantity);
+                cart.setProductId(product.getId());
+                addToCart(cart);
+            }
+            else {
+                Intent loginIntent = new Intent(this, LoginActivity.class);
+                startActivity(loginIntent);
+            }
+
         });
     }
 
@@ -129,6 +137,9 @@ public class ProductActivity extends AppCompatActivity {
     }
 
     private void addToCart(Cart cart) {
+
+        Log.d("ADD TO CART TOKEN", SharedPref.getToken(this));
+
         progressDialog =  new ProgressDialog(this);
         progressDialog.setCancelable(true);
         progressDialog.setTitle("Please wait");
@@ -143,12 +154,21 @@ public class ProductActivity extends AppCompatActivity {
                         Toastie.topSuccess(getApplicationContext(), message.getMessage(), Toast.LENGTH_LONG).show();
                         progressDialog.dismiss();
                         finish();
+
+                        Log.d("ADD TO CART", "SUCCESS");
                     }
 
                     @Override
                     public void onFailure(@NonNull Call<ActionResponse> call, @NonNull Throwable t) {
                         progressDialog.dismiss();
+
+                        Log.d("ADD TO CART", "FAILED");
                     }
                 });
+    }
+
+
+    private boolean isLoggedIn() {
+        return SharedPref.getIsLoggedIn(this);
     }
 }
