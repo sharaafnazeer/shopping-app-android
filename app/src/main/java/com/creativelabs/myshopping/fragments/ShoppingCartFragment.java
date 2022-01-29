@@ -1,5 +1,9 @@
 package com.creativelabs.myshopping.fragments;
 
+<<<<<<< HEAD
+=======
+import android.annotation.SuppressLint;
+>>>>>>> c4bf4969c20a0f0bc159ac1d330e58e16d5ed054
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
@@ -15,14 +19,27 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+<<<<<<< HEAD
+=======
+import android.widget.Toast;
+>>>>>>> c4bf4969c20a0f0bc159ac1d330e58e16d5ed054
 
 import com.creativelabs.myshopping.LoginActivity;
 import com.creativelabs.myshopping.R;
 import com.creativelabs.myshopping.adapters.ShoppingCartAdapter;
+<<<<<<< HEAD
 import com.creativelabs.myshopping.entity.Cart;
+=======
+import com.creativelabs.myshopping.entity.ActionResponse;
+import com.creativelabs.myshopping.entity.Cart;
+import com.creativelabs.myshopping.entity.Order;
+import com.creativelabs.myshopping.entity.ShoppingCart;
+import com.creativelabs.myshopping.utils.ActionHandlerInterface;
+>>>>>>> c4bf4969c20a0f0bc159ac1d330e58e16d5ed054
 import com.creativelabs.myshopping.utils.ApiInterface;
 import com.creativelabs.myshopping.utils.NetworkService;
 import com.creativelabs.myshopping.utils.SharedPref;
+import com.mrntlu.toastie.Toastie;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -36,7 +53,7 @@ import retrofit2.Response;
  * Use the {@link ShoppingCartFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class ShoppingCartFragment extends Fragment {
+public class ShoppingCartFragment extends Fragment implements ActionHandlerInterface {
 
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -82,9 +99,15 @@ public class ShoppingCartFragment extends Fragment {
     ConstraintLayout vNotLoggedIn;
     ShoppingCartAdapter shoppingCartAdapter;
     List<Cart> shoppingCartList;
+<<<<<<< HEAD
     Button btnGoLogin;
 
     ApiInterface apiInterface;
+=======
+    Button btnGoLogin, btnCheckout;
+    ApiInterface apiInterface;
+
+>>>>>>> c4bf4969c20a0f0bc159ac1d330e58e16d5ed054
     ProgressDialog progressDialog;
 
     @Override
@@ -95,6 +118,7 @@ public class ShoppingCartFragment extends Fragment {
 
         vNotLoggedIn = view.findViewById(R.id.vNotLoggedIn);
         rvShoppingCart = view.findViewById(R.id.rvShoppingCart);
+        btnCheckout = view.findViewById(R.id.btnCheckout);
 
         if (isLoggedIn()) {
             rvShoppingCart.setVisibility(View.VISIBLE);
@@ -110,9 +134,20 @@ public class ShoppingCartFragment extends Fragment {
             Intent loginIntent = new Intent(getContext(), LoginActivity.class);
             startActivity(loginIntent);
         });
+<<<<<<< HEAD
         apiInterface = NetworkService.getInstance(SharedPref.getToken(getContext()))
                 .getService(ApiInterface.class);
 
+=======
+
+        apiInterface = NetworkService.getInstance(SharedPref.getToken(getContext()))
+                .getService(ApiInterface.class);
+
+        btnCheckout.setOnClickListener(v -> {
+            checkout();
+        });
+
+>>>>>>> c4bf4969c20a0f0bc159ac1d330e58e16d5ed054
         return view;
     }
 
@@ -120,15 +155,35 @@ public class ShoppingCartFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
+<<<<<<< HEAD
         shoppingCartAdapter = new ShoppingCartAdapter(getContext());
+=======
+        shoppingCartAdapter = new ShoppingCartAdapter(getContext(), this);
+>>>>>>> c4bf4969c20a0f0bc159ac1d330e58e16d5ed054
         rvShoppingCart.setLayoutManager(new LinearLayoutManager(getContext()));
 
         rvShoppingCart.setAdapter(shoppingCartAdapter);
         shoppingCartList = new ArrayList<>();
 
         shoppingCartAdapter.setShoppingCartList(shoppingCartList);
+<<<<<<< HEAD
 
         getCarts();
+=======
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        if (isLoggedIn()) {
+            rvShoppingCart.setVisibility(View.VISIBLE);
+            vNotLoggedIn.setVisibility(View.GONE);
+            getCarts();
+        } else {
+            rvShoppingCart.setVisibility(View.GONE);
+            vNotLoggedIn.setVisibility(View.VISIBLE);
+        }
+>>>>>>> c4bf4969c20a0f0bc159ac1d330e58e16d5ed054
     }
 
     private boolean isLoggedIn() {
@@ -136,20 +191,36 @@ public class ShoppingCartFragment extends Fragment {
     }
 
     private void getCarts() {
+<<<<<<< HEAD
 
         progressDialog = new ProgressDialog(getContext());
+=======
+        progressDialog =  new ProgressDialog(getContext());
+>>>>>>> c4bf4969c20a0f0bc159ac1d330e58e16d5ed054
         progressDialog.setCancelable(true);
         progressDialog.setTitle("Please wait");
         progressDialog.setMessage("I am fetching your data");
         progressDialog.show();
         apiInterface.getAllCarts()
                 .enqueue(new Callback<List<Cart>>() {
+<<<<<<< HEAD
                     @Override
                     public void onResponse(@NonNull Call<List<Cart>> call, @NonNull Response<List<Cart>> response) {
                         shoppingCartList = response.body();
 
                         shoppingCartAdapter.setShoppingCartList(shoppingCartList);
                         shoppingCartAdapter.notifyDataSetChanged();
+=======
+                    @SuppressLint("NotifyDataSetChanged")
+                    @Override
+                    public void onResponse(@NonNull Call<List<Cart>> call, @NonNull Response<List<Cart>> response) {
+                        shoppingCartList = response.body();
+                        shoppingCartAdapter.setShoppingCartList(shoppingCartList);
+                        shoppingCartAdapter.notifyDataSetChanged();
+                        if (shoppingCartList.size() > 0) {
+                            btnCheckout.setVisibility(View.VISIBLE);
+                        }
+>>>>>>> c4bf4969c20a0f0bc159ac1d330e58e16d5ed054
                         progressDialog.dismiss();
                     }
 
@@ -159,4 +230,35 @@ public class ShoppingCartFragment extends Fragment {
                     }
                 });
     }
+<<<<<<< HEAD
+=======
+
+    private void checkout() {
+        progressDialog =  new ProgressDialog(getContext());
+        progressDialog.setCancelable(true);
+        progressDialog.setTitle("Please wait");
+        progressDialog.setMessage("I am fetching your data");
+        progressDialog.show();
+        apiInterface.saveOrder()
+                .enqueue(new Callback<ActionResponse>() {
+                    @Override
+                    public void onResponse(@NonNull Call<ActionResponse> call, @NonNull Response<ActionResponse> response) {
+                        ActionResponse message = response.body();
+                        assert message != null;
+                        Toastie.topSuccess(getContext(), message.getMessage(), Toast.LENGTH_LONG).show();
+                        progressDialog.dismiss();
+                    }
+
+                    @Override
+                    public void onFailure(@NonNull Call<ActionResponse> call, @NonNull Throwable t) {
+                        progressDialog.dismiss();
+                    }
+                });
+    }
+
+    @Override
+    public void updateInterface() {
+        getCarts();
+    }
+>>>>>>> c4bf4969c20a0f0bc159ac1d330e58e16d5ed054
 }

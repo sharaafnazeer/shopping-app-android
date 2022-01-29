@@ -24,8 +24,14 @@ import com.mrntlu.toastie.Toastie;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
+<<<<<<< HEAD
 
 public class LoginActivity extends AppCompatActivity {
+=======
+
+public class LoginActivity extends AppCompatActivity {
+
+>>>>>>> c4bf4969c20a0f0bc159ac1d330e58e16d5ed054
 
     // Java int string float char boolean
     // 2 Edit Text, Button 2, TextView
@@ -59,9 +65,17 @@ public class LoginActivity extends AppCompatActivity {
             String pass = etPassword.getText().toString();
 
             if (validate(uname, pass)) {
+<<<<<<< HEAD
                 Auth auth = new Auth();
                 auth.setEmail(uname);
                 auth.setPassword(pass);
+=======
+
+                Auth auth = new Auth();
+                auth.setEmail(uname);
+                auth.setPassword(pass);
+
+>>>>>>> c4bf4969c20a0f0bc159ac1d330e58e16d5ed054
                 login(auth);
             }
         });
@@ -83,8 +97,12 @@ public class LoginActivity extends AppCompatActivity {
             }
         });
 
+<<<<<<< HEAD
         apiInterface = NetworkService.getInstance(SharedPref.getToken(this))
                 .getService(ApiInterface.class);
+=======
+        apiInterface = NetworkService.getInstance(SharedPref.getToken(this)).getService(ApiInterface.class);
+>>>>>>> c4bf4969c20a0f0bc159ac1d330e58e16d5ed054
     }
 
     private boolean validate(String uname, String pass) {
@@ -106,6 +124,7 @@ public class LoginActivity extends AppCompatActivity {
         apiInterface.login(auth)
                 .enqueue(new Callback<AuthResponse>() {
                     @Override
+<<<<<<< HEAD
                     public void onResponse(@NonNull Call<AuthResponse> call, @NonNull Response<AuthResponse> response) {
                         SharedPref.setIsLoggedIn(getApplicationContext(), true);
 
@@ -123,5 +142,26 @@ public class LoginActivity extends AppCompatActivity {
                     }
                 });
     }
+=======
+                    public void onResponse(Call<AuthResponse> call, Response<AuthResponse> response) {
+                        SharedPref.setIsLoggedIn(getApplicationContext(), true);
+                        assert response.body() != null;
+                        SharedPref.setToken(getApplicationContext(), response.body().getJwt());
+//                        Intent homeIntent = new Intent(getApplicationContext(), MainActivity.class);
+//                        startActivity(homeIntent);
+                        finish();
+                        Log.d("LOGIN", "SUCCESS");
+                        Log.d("LOGIN", SharedPref.getToken(getApplicationContext()));
+                    }
+
+                    @Override
+                    public void onFailure(Call<AuthResponse> call, Throwable t) {
+                        Log.d("LOGIN", "FAILED");
+                    }
+                });
+
+    }
+
+>>>>>>> c4bf4969c20a0f0bc159ac1d330e58e16d5ed054
 
 }

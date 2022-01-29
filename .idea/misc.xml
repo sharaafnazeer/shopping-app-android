@@ -7,15 +7,20 @@
         <entry key="app/src/main/res/layout/activity_login.xml" value="0.1" />
         <entry key="app/src/main/res/layout/activity_register.xml" value="0.178125" />
         <entry key="app/src/main/res/layout/fragment_cart.xml" value="0.19322916666666667" />
+        <entry key="app/src/main/res/layout/fragment_home.xml" value="0.3220108695652174" />
         <entry key="app/src/main/res/layout/fragment_my_account.xml" value="0.19322916666666667" />
         <entry key="app/src/main/res/layout/layout_cart_item.xml" value="0.19322916666666667" />
+<<<<<<< HEAD
+=======
+        <entry key="app/src/main/res/layout/layout_category_item.xml" value="0.3220108695652174" />
+>>>>>>> c4bf4969c20a0f0bc159ac1d330e58e16d5ed054
         <entry key="app/src/main/res/layout/layout_not_loggedin.xml" value="0.1" />
         <entry key="app/src/main/res/layout/layout_one_order.xml" value="0.19322916666666667" />
       </map>
     </option>
   </component>
   <component name="ExternalStorageConfigurationManager" enabled="true" />
-  <component name="ProjectRootManager" version="2" languageLevel="JDK_1_8" default="true" project-jdk-name="1.8" project-jdk-type="JavaSDK">
+  <component name="ProjectRootManager" version="2" languageLevel="JDK_11" project-jdk-name="1.8" project-jdk-type="JavaSDK">
     <output url="file://$PROJECT_DIR$/build/classes" />
   </component>
   <component name="ProjectType">

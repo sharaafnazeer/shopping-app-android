@@ -5,7 +5,10 @@ public class Auth {
     private String email;
     private String password;
 
+<<<<<<< HEAD
 
+=======
+>>>>>>> c4bf4969c20a0f0bc159ac1d330e58e16d5ed054
     public String getEmail() {
         return email;
     }

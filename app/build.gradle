@@ -38,6 +38,9 @@ android {
         sourceCompatibility JavaVersion.VERSION_1_8
         targetCompatibility JavaVersion.VERSION_1_8
     }
+    buildFeatures {
+        viewBinding true
+    }
 }
 
 dependencies {
@@ -54,6 +57,15 @@ dependencies {
     implementation 'com.squareup.retrofit2:retrofit:2.9.0'
     implementation 'com.squareup.retrofit2:converter-gson:2.5.0'
 
+<<<<<<< HEAD
+=======
+    //okhttp3
+    implementation 'com.squareup.okhttp3:okhttp:3.13.1'
+    implementation 'com.squareup.okhttp3:logging-interceptor:3.13.1'
+
+    implementation 'com.synnapps:carouselview:0.1.5'
+
+>>>>>>> c4bf4969c20a0f0bc159ac1d330e58e16d5ed054
 
     implementation "androidx.multidex:multidex:2.0.1"
     implementation 'androidx.appcompat:appcompat:1.4.0'

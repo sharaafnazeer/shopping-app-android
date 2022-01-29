@@ -2,10 +2,11 @@ package com.creativelabs.myshopping.entity;
 
 public class Order {
     private int id;
-    private String orderId;
-    private String date;
-    private Double amount;
+    private String code;
+    private String orderDate;
+    private Double totalAmount;
     private int rating;
+    private int status;
 
     public int getId() {
         return id;
@@ -15,28 +16,28 @@ public class Order {
         this.id = id;
     }
 
-    public String getOrderId() {
-        return orderId;
+    public String getCode() {
+        return code;
     }
 
-    public void setOrderId(String orderId) {
-        this.orderId = orderId;
+    public void setCode(String code) {
+        this.code = code;
     }
 
-    public String getDate() {
-        return date;
+    public String getOrderDate() {
+        return orderDate;
     }
 
-    public void setDate(String date) {
-        this.date = date;
+    public void setOrderDate(String orderDate) {
+        this.orderDate = orderDate;
     }
 
-    public Double getAmount() {
-        return amount;
+    public Double getTotalAmount() {
+        return totalAmount;
     }
 
-    public void setAmount(Double amount) {
-        this.amount = amount;
+    public void setTotalAmount(Double totalAmount) {
+        this.totalAmount = totalAmount;
     }
 
     public int getRating() {
@@ -45,5 +46,13 @@ public class Order {
 
     public void setRating(int rating) {
         this.rating = rating;
+    }
+
+    public int getStatus() {
+        return status;
+    }
+
+    public void setStatus(int status) {
+        this.status = status;
     }
 }

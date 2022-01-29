@@ -115,6 +115,20 @@ public class OrdersFragment extends Fragment {
 
     }
 
+    @Override
+    public void onResume() {
+        super.onResume();
+        if (isLoggedIn()) {
+            vpOrders.setVisibility(View.VISIBLE);
+            tlOrderTabs.setVisibility(View.VISIBLE);
+            vNotLoggedIn.setVisibility(View.GONE);
+        } else {
+            vpOrders.setVisibility(View.GONE);
+            tlOrderTabs.setVisibility(View.GONE);
+            vNotLoggedIn.setVisibility(View.VISIBLE);
+        }
+    }
+
     private boolean isLoggedIn() {
         return SharedPref.getIsLoggedIn(getContext());
     }

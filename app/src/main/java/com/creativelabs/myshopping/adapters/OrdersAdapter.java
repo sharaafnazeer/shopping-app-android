@@ -36,9 +36,9 @@ public class OrdersAdapter extends RecyclerView.Adapter<OrdersAdapter.ViewHolder
     public void onBindViewHolder(@NonNull OrdersAdapter.ViewHolder holder, int position) {
         Order order = orderList.get(position);
 
-        holder.tvOrderID.setText(order.getOrderId());
-        holder.tvOrderDate.setText(order.getDate());
-        holder.tvOrderAmount.setText("LKR. " + order.getAmount());
+        holder.tvOrderID.setText(order.getCode());
+        holder.tvOrderDate.setText(order.getOrderDate());
+        holder.tvOrderAmount.setText("LKR. " + order.getTotalAmount());
         holder.rbOrderRating.setRating(order.getRating());
     }
 

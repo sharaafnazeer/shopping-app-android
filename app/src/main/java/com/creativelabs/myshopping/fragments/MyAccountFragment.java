@@ -22,6 +22,7 @@ import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
 import com.mrntlu.toastie.Toastie;
 
+import java.util.Objects;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -72,7 +73,11 @@ public class MyAccountFragment extends Fragment {
         }
     }
 
+<<<<<<< HEAD
     Button btnAccountUpdate, btnGoLogin;
+=======
+    Button btnAccountUpdate, btnLogout, btnGoLogin;
+>>>>>>> c4bf4969c20a0f0bc159ac1d330e58e16d5ed054
     TextInputEditText etFirstName, etEmail, etPhoneNumber, etAddress;
     TextInputLayout tiFirstName, tiEmail, tiPhoneNumber, tiAddress;
     NestedScrollView nsAccount;
@@ -99,6 +104,16 @@ public class MyAccountFragment extends Fragment {
         vNotLoggedIn = view.findViewById(R.id.vNotLoggedIn);
         nsAccount = view.findViewById(R.id.nsAccount);
 
+        btnGoLogin = view.findViewById(R.id.btnGoLogin);
+
+        btnLogout = view.findViewById(R.id.btnLogout);
+
+        btnGoLogin.setOnClickListener(v -> {
+            Intent loginIntent = new Intent(getContext(), LoginActivity.class);
+            startActivity(loginIntent);
+        });
+
+
         btnAccountUpdate.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -113,17 +128,27 @@ public class MyAccountFragment extends Fragment {
 
         if (isLoggedIn()) {
             nsAccount.setVisibility(View.VISIBLE);
+            btnLogout.setVisibility(View.VISIBLE);
             vNotLoggedIn.setVisibility(View.GONE);
         } else {
             nsAccount.setVisibility(View.GONE);
+            btnLogout.setVisibility(View.GONE);
             vNotLoggedIn.setVisibility(View.VISIBLE);
         }
 
+<<<<<<< HEAD
         btnGoLogin = view.findViewById(R.id.btnGoLogin);
 
         btnGoLogin.setOnClickListener(v -> {
             Intent loginIntent = new Intent(getContext(), LoginActivity.class);
             startActivity(loginIntent);
+=======
+        btnLogout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                logout();
+            }
+>>>>>>> c4bf4969c20a0f0bc159ac1d330e58e16d5ed054
         });
 
         return view;
@@ -173,5 +198,20 @@ public class MyAccountFragment extends Fragment {
 
     private boolean isLoggedIn() {
         return SharedPref.getIsLoggedIn(getContext());
+    }
+
+    private void logout() {
+        SharedPref.setIsLoggedIn(getContext(), false);
+        SharedPref.setToken(getContext(), null);
+
+        if (isLoggedIn()) {
+            nsAccount.setVisibility(View.VISIBLE);
+            btnLogout.setVisibility(View.VISIBLE);
+            vNotLoggedIn.setVisibility(View.GONE);
+        } else {
+            nsAccount.setVisibility(View.GONE);
+            btnLogout.setVisibility(View.GONE);
+            vNotLoggedIn.setVisibility(View.VISIBLE);
+        }
     }
 }

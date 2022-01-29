@@ -16,6 +16,10 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.creativelabs.myshopping.R;
 import com.creativelabs.myshopping.entity.ActionResponse;
 import com.creativelabs.myshopping.entity.Cart;
+<<<<<<< HEAD
+=======
+import com.creativelabs.myshopping.utils.ActionHandlerInterface;
+>>>>>>> c4bf4969c20a0f0bc159ac1d330e58e16d5ed054
 import com.creativelabs.myshopping.utils.ApiInterface;
 import com.creativelabs.myshopping.utils.NetworkService;
 import com.creativelabs.myshopping.utils.SharedPref;
@@ -36,6 +40,7 @@ public class ShoppingCartAdapter extends RecyclerView.Adapter<ShoppingCartAdapte
 
     private List<Cart> shoppingCartList = new ArrayList<>();
     ApiInterface apiInterface;
+<<<<<<< HEAD
     private Context context;
     private ProgressDialog progressDialog;
 
@@ -45,8 +50,25 @@ public class ShoppingCartAdapter extends RecyclerView.Adapter<ShoppingCartAdapte
                 .getService(ApiInterface.class);
     }
 
+=======
+    Context context;
+    ProgressDialog progressDialog;
+
+    ActionHandlerInterface actionHandlerInterface;
+
+    public ShoppingCartAdapter(Context context, ActionHandlerInterface actionHandlerInterface) {
+        this.context = context;
+        this.actionHandlerInterface = actionHandlerInterface;
+    }
+
+    public ShoppingCartAdapter() {
+    }
+
+>>>>>>> c4bf4969c20a0f0bc159ac1d330e58e16d5ed054
     public void setShoppingCartList(List<Cart> shoppingCartList) {
         this.shoppingCartList = shoppingCartList;
+        apiInterface = NetworkService.getInstance(SharedPref.getToken(this.context))
+                .getService(ApiInterface.class);
     }
 
     @NonNull
@@ -62,14 +84,16 @@ public class ShoppingCartAdapter extends RecyclerView.Adapter<ShoppingCartAdapte
         Cart cart = shoppingCartList.get(position);
 
         holder.tvItemName.setText(cart.getProductName());
+<<<<<<< HEAD
         holder.tvItemPrice.setText(String.format("LKR. %s", cart.getProductPrice()));
+=======
+        holder.tvItemPrice.setText(String.format("LKR. %s", cart.getTotalPrice()));
+>>>>>>> c4bf4969c20a0f0bc159ac1d330e58e16d5ed054
         holder.npQuantity.setValue(cart.getQuantity());
 
         // Handle with Picasso
         Picasso.get()
                 .load(cart.getImage())
-                .resize(50, 50)
-                .centerCrop()
                 .error(R.drawable.ic_baseline_shopping_bag_24)
                 .into(holder.ivCartItem);
 
@@ -77,31 +101,52 @@ public class ShoppingCartAdapter extends RecyclerView.Adapter<ShoppingCartAdapte
             @Override
             public void valueChanged(int value, ActionEnum action) {
 
+<<<<<<< HEAD
                 progressDialog = new ProgressDialog(context);
                 progressDialog.setCancelable(true);
                 progressDialog.setTitle("Please wait");
                 progressDialog.setMessage("I am fetching your data");
                 progressDialog.show();
+=======
+                progressDialog =  new ProgressDialog(context);
+                progressDialog.setCancelable(true);
+                progressDialog.setTitle("Please wait");
+                progressDialog.setMessage("I am updating your data");
+                progressDialog.show();
+
+>>>>>>> c4bf4969c20a0f0bc159ac1d330e58e16d5ed054
                 cart.setQuantity(value);
 
                 apiInterface.updateCart(cart.getId(), cart)
                         .enqueue(new Callback<ActionResponse>() {
                             @Override
                             public void onResponse(@NonNull Call<ActionResponse> call, @NonNull Response<ActionResponse> response) {
+<<<<<<< HEAD
 
+=======
+>>>>>>> c4bf4969c20a0f0bc159ac1d330e58e16d5ed054
                                 assert response.body() != null;
                                 Toastie.topSuccess(context, response.body().getMessage(), Toast.LENGTH_LONG).show();
                                 progressDialog.dismiss();
                             }
 
                             @Override
+<<<<<<< HEAD
                             public void onFailure(@NonNull Call<ActionResponse> call, @NonNull Throwable t) {
                                 progressDialog.dismiss();
 
+=======
+                            public void onFailure(@NonNull Call<ActionResponse> call, Throwable t) {
+                                progressDialog.dismiss();
+>>>>>>> c4bf4969c20a0f0bc159ac1d330e58e16d5ed054
                             }
                         });
 
                 double totalPrice = cart.getProductPrice() * value;
+<<<<<<< HEAD
+=======
+
+>>>>>>> c4bf4969c20a0f0bc159ac1d330e58e16d5ed054
                 holder.tvItemPrice.setText(String.format("LKR. %s", totalPrice));
             }
         });
@@ -109,6 +154,7 @@ public class ShoppingCartAdapter extends RecyclerView.Adapter<ShoppingCartAdapte
         holder.ibRemoveCartItem.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+<<<<<<< HEAD
                 progressDialog = new ProgressDialog(context);
                 progressDialog.setCancelable(true);
                 progressDialog.setTitle("Please wait");
@@ -129,6 +175,28 @@ public class ShoppingCartAdapter extends RecyclerView.Adapter<ShoppingCartAdapte
                                 progressDialog.dismiss();
                             }
                         });
+=======
+                progressDialog =  new ProgressDialog(context);
+                progressDialog.setCancelable(true);
+                progressDialog.setTitle("Please wait");
+                progressDialog.setMessage("I am updating your data");
+                progressDialog.show();
+                apiInterface.deleteCart(cart.getId()).enqueue(new Callback<ActionResponse>() {
+                    @Override
+                    public void onResponse(@NonNull Call<ActionResponse> call, @NonNull Response<ActionResponse> response) {
+                        assert response.body() != null;
+                        Toastie.topSuccess(context, response.body().getMessage(), Toast.LENGTH_LONG).show();
+                        progressDialog.dismiss();
+
+                        actionHandlerInterface.updateInterface();
+                    }
+
+                    @Override
+                    public void onFailure(@NonNull Call<ActionResponse> call, @NonNull Throwable t) {
+                        progressDialog.dismiss();
+                    }
+                });
+>>>>>>> c4bf4969c20a0f0bc159ac1d330e58e16d5ed054
             }
         });
     }
@@ -153,7 +221,7 @@ public class ShoppingCartAdapter extends RecyclerView.Adapter<ShoppingCartAdapte
             tvItemName = itemView.findViewById(R.id.tvItemName);
             tvItemPrice = itemView.findViewById(R.id.tvItemPrice);
             ibRemoveCartItem = itemView.findViewById(R.id.ibRemoveCartItem);
-            npQuantity = itemView.findViewById(R.id.npQuantity);
+            npQuantity = itemView.findViewById(R.id.npProductOneQuantity);
         }
     }
 }
