@@ -1,5 +1,6 @@
 package com.creativelabs.myshopping.fragments;
 
+import android.content.Intent;
 import android.os.Bundle;
 
 import androidx.cardview.widget.CardView;
@@ -14,6 +15,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.Toast;
 
+import com.creativelabs.myshopping.LoginActivity;
 import com.creativelabs.myshopping.R;
 import com.creativelabs.myshopping.utils.SharedPref;
 import com.google.android.material.textfield.TextInputEditText;
@@ -70,7 +72,7 @@ public class MyAccountFragment extends Fragment {
         }
     }
 
-    Button btnAccountUpdate;
+    Button btnAccountUpdate, btnGoLogin;
     TextInputEditText etFirstName, etEmail, etPhoneNumber, etAddress;
     TextInputLayout tiFirstName, tiEmail, tiPhoneNumber, tiAddress;
     NestedScrollView nsAccount;
@@ -116,6 +118,13 @@ public class MyAccountFragment extends Fragment {
             nsAccount.setVisibility(View.GONE);
             vNotLoggedIn.setVisibility(View.VISIBLE);
         }
+
+        btnGoLogin = view.findViewById(R.id.btnGoLogin);
+
+        btnGoLogin.setOnClickListener(v -> {
+            Intent loginIntent = new Intent(getContext(), LoginActivity.class);
+            startActivity(loginIntent);
+        });
 
         return view;
     }

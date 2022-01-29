@@ -1,6 +1,5 @@
 package com.creativelabs.myshopping.fragments;
 
-import android.annotation.SuppressLint;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
@@ -19,11 +18,8 @@ import android.widget.Button;
 
 import com.creativelabs.myshopping.LoginActivity;
 import com.creativelabs.myshopping.R;
-import com.creativelabs.myshopping.adapters.OrdersAdapter;
 import com.creativelabs.myshopping.adapters.ShoppingCartAdapter;
 import com.creativelabs.myshopping.entity.Cart;
-import com.creativelabs.myshopping.entity.Order;
-import com.creativelabs.myshopping.entity.ShoppingCart;
 import com.creativelabs.myshopping.utils.ApiInterface;
 import com.creativelabs.myshopping.utils.NetworkService;
 import com.creativelabs.myshopping.utils.SharedPref;
@@ -87,8 +83,8 @@ public class ShoppingCartFragment extends Fragment {
     ShoppingCartAdapter shoppingCartAdapter;
     List<Cart> shoppingCartList;
     Button btnGoLogin;
-    ApiInterface apiInterface;
 
+    ApiInterface apiInterface;
     ProgressDialog progressDialog;
 
     @Override
@@ -114,10 +110,8 @@ public class ShoppingCartFragment extends Fragment {
             Intent loginIntent = new Intent(getContext(), LoginActivity.class);
             startActivity(loginIntent);
         });
-
         apiInterface = NetworkService.getInstance(SharedPref.getToken(getContext()))
                 .getService(ApiInterface.class);
-
 
         return view;
     }
@@ -133,6 +127,7 @@ public class ShoppingCartFragment extends Fragment {
         shoppingCartList = new ArrayList<>();
 
         shoppingCartAdapter.setShoppingCartList(shoppingCartList);
+
         getCarts();
     }
 
@@ -141,17 +136,18 @@ public class ShoppingCartFragment extends Fragment {
     }
 
     private void getCarts() {
-        progressDialog =  new ProgressDialog(getContext());
+
+        progressDialog = new ProgressDialog(getContext());
         progressDialog.setCancelable(true);
         progressDialog.setTitle("Please wait");
         progressDialog.setMessage("I am fetching your data");
         progressDialog.show();
         apiInterface.getAllCarts()
                 .enqueue(new Callback<List<Cart>>() {
-                    @SuppressLint("NotifyDataSetChanged")
                     @Override
                     public void onResponse(@NonNull Call<List<Cart>> call, @NonNull Response<List<Cart>> response) {
                         shoppingCartList = response.body();
+
                         shoppingCartAdapter.setShoppingCartList(shoppingCartList);
                         shoppingCartAdapter.notifyDataSetChanged();
                         progressDialog.dismiss();

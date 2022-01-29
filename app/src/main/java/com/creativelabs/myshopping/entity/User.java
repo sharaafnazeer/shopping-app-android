@@ -1,6 +1,6 @@
 package com.creativelabs.myshopping.entity;
 
-public class User extends Auth{
+public class User extends Auth {
 
     private int id;
     private String firstName;
@@ -29,4 +29,6 @@ public class User extends Auth{
     public void setLastName(String lastName) {
         this.lastName = lastName;
     }
+
 }
+

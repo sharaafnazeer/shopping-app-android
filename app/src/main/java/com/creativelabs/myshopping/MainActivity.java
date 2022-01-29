@@ -30,8 +30,6 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationV
 
         bnVMain.setOnNavigationItemSelectedListener(this);
 
-        String token = SharedPref.getToken(this);
-
         Log.d("TOKEN", SharedPref.getToken(this));
     }
 

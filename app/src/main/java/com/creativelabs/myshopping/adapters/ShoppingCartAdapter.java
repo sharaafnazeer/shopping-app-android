@@ -16,7 +16,6 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.creativelabs.myshopping.R;
 import com.creativelabs.myshopping.entity.ActionResponse;
 import com.creativelabs.myshopping.entity.Cart;
-import com.creativelabs.myshopping.entity.ShoppingCart;
 import com.creativelabs.myshopping.utils.ApiInterface;
 import com.creativelabs.myshopping.utils.NetworkService;
 import com.creativelabs.myshopping.utils.SharedPref;
@@ -37,20 +36,17 @@ public class ShoppingCartAdapter extends RecyclerView.Adapter<ShoppingCartAdapte
 
     private List<Cart> shoppingCartList = new ArrayList<>();
     ApiInterface apiInterface;
-    Context context;
-    ProgressDialog progressDialog;
+    private Context context;
+    private ProgressDialog progressDialog;
 
-    public ShoppingCartAdapter(Context context) {
+    public  ShoppingCartAdapter(Context context) {
         this.context = context;
-    }
-
-    public ShoppingCartAdapter() {
+        apiInterface = NetworkService.getInstance(SharedPref.getToken(this.context))
+                .getService(ApiInterface.class);
     }
 
     public void setShoppingCartList(List<Cart> shoppingCartList) {
         this.shoppingCartList = shoppingCartList;
-        apiInterface = NetworkService.getInstance(SharedPref.getToken(this.context))
-                .getService(ApiInterface.class);
     }
 
     @NonNull
@@ -66,7 +62,7 @@ public class ShoppingCartAdapter extends RecyclerView.Adapter<ShoppingCartAdapte
         Cart cart = shoppingCartList.get(position);
 
         holder.tvItemName.setText(cart.getProductName());
-        holder.tvItemPrice.setText(String.format("LKR. %s", cart.getTotalPrice()));
+        holder.tvItemPrice.setText(String.format("LKR. %s", cart.getProductPrice()));
         holder.npQuantity.setValue(cart.getQuantity());
 
         // Handle with Picasso
@@ -81,15 +77,45 @@ public class ShoppingCartAdapter extends RecyclerView.Adapter<ShoppingCartAdapte
             @Override
             public void valueChanged(int value, ActionEnum action) {
 
-                progressDialog =  new ProgressDialog(context);
+                progressDialog = new ProgressDialog(context);
                 progressDialog.setCancelable(true);
                 progressDialog.setTitle("Please wait");
-                progressDialog.setMessage("I am updating your data");
+                progressDialog.setMessage("I am fetching your data");
                 progressDialog.show();
-
                 cart.setQuantity(value);
 
                 apiInterface.updateCart(cart.getId(), cart)
+                        .enqueue(new Callback<ActionResponse>() {
+                            @Override
+                            public void onResponse(@NonNull Call<ActionResponse> call, @NonNull Response<ActionResponse> response) {
+
+                                assert response.body() != null;
+                                Toastie.topSuccess(context, response.body().getMessage(), Toast.LENGTH_LONG).show();
+                                progressDialog.dismiss();
+                            }
+
+                            @Override
+                            public void onFailure(@NonNull Call<ActionResponse> call, @NonNull Throwable t) {
+                                progressDialog.dismiss();
+
+                            }
+                        });
+
+                double totalPrice = cart.getProductPrice() * value;
+                holder.tvItemPrice.setText(String.format("LKR. %s", totalPrice));
+            }
+        });
+
+        holder.ibRemoveCartItem.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                progressDialog = new ProgressDialog(context);
+                progressDialog.setCancelable(true);
+                progressDialog.setTitle("Please wait");
+                progressDialog.setMessage("I am fetching your data");
+                progressDialog.show();
+
+                apiInterface.deleteCart(cart.getId())
                         .enqueue(new Callback<ActionResponse>() {
                             @Override
                             public void onResponse(@NonNull Call<ActionResponse> call, @NonNull Response<ActionResponse> response) {
@@ -99,38 +125,10 @@ public class ShoppingCartAdapter extends RecyclerView.Adapter<ShoppingCartAdapte
                             }
 
                             @Override
-                            public void onFailure(@NonNull Call<ActionResponse> call, Throwable t) {
+                            public void onFailure(@NonNull Call<ActionResponse> call, @NonNull Throwable t) {
                                 progressDialog.dismiss();
                             }
                         });
-
-                double totalPrice = cart.getProductPrice() * value;
-
-                holder.tvItemPrice.setText(String.format("LKR. %s", totalPrice));
-            }
-        });
-
-        holder.ibRemoveCartItem.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                progressDialog =  new ProgressDialog(context);
-                progressDialog.setCancelable(true);
-                progressDialog.setTitle("Please wait");
-                progressDialog.setMessage("I am updating your data");
-                progressDialog.show();
-                apiInterface.deleteCart(cart.getId()).enqueue(new Callback<ActionResponse>() {
-                    @Override
-                    public void onResponse(@NonNull Call<ActionResponse> call, @NonNull Response<ActionResponse> response) {
-                        assert response.body() != null;
-                        Toastie.topSuccess(context, response.body().getMessage(), Toast.LENGTH_LONG).show();
-                        progressDialog.dismiss();
-                    }
-
-                    @Override
-                    public void onFailure(@NonNull Call<ActionResponse> call, @NonNull Throwable t) {
-                        progressDialog.dismiss();
-                    }
-                });
             }
         });
     }

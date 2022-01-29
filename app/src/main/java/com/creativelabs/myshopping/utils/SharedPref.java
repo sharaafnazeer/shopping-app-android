@@ -7,7 +7,6 @@ import android.content.SharedPreferences;
 public class SharedPref {
     private SharedPreferences preferences;
 
-
     @SuppressLint("WrongConstant")
     public static SharedPreferences getPreferences(Context context) {
         return context.getSharedPreferences(Constants.PREF_NAME, Constants.PRIVATE_MODE);
@@ -28,7 +27,4 @@ public class SharedPref {
     public static String getToken(Context context) {
         return getPreferences(context).getString(Constants.TOKEN, null);
     }
-
-
-
 }

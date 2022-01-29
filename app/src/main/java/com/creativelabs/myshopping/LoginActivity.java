@@ -2,6 +2,7 @@ package com.creativelabs.myshopping;
 
 import static com.creativelabs.myshopping.utils.Helpers.checkEmail;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
@@ -20,14 +21,11 @@ import com.creativelabs.myshopping.utils.NetworkService;
 import com.creativelabs.myshopping.utils.SharedPref;
 import com.mrntlu.toastie.Toastie;
 
-import io.reactivex.android.schedulers.AndroidSchedulers;
-import io.reactivex.schedulers.Schedulers;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
 public class LoginActivity extends AppCompatActivity {
-
 
     // Java int string float char boolean
     // 2 Edit Text, Button 2, TextView
@@ -61,11 +59,9 @@ public class LoginActivity extends AppCompatActivity {
             String pass = etPassword.getText().toString();
 
             if (validate(uname, pass)) {
-
                 Auth auth = new Auth();
                 auth.setEmail(uname);
                 auth.setPassword(pass);
-
                 login(auth);
             }
         });
@@ -87,7 +83,8 @@ public class LoginActivity extends AppCompatActivity {
             }
         });
 
-        apiInterface = NetworkService.getInstance(SharedPref.getToken(this)).getService(ApiInterface.class);
+        apiInterface = NetworkService.getInstance(SharedPref.getToken(this))
+                .getService(ApiInterface.class);
     }
 
     private boolean validate(String uname, String pass) {
@@ -109,8 +106,9 @@ public class LoginActivity extends AppCompatActivity {
         apiInterface.login(auth)
                 .enqueue(new Callback<AuthResponse>() {
                     @Override
-                    public void onResponse(Call<AuthResponse> call, Response<AuthResponse> response) {
+                    public void onResponse(@NonNull Call<AuthResponse> call, @NonNull Response<AuthResponse> response) {
                         SharedPref.setIsLoggedIn(getApplicationContext(), true);
+
                         assert response.body() != null;
                         SharedPref.setToken(getApplicationContext(), response.body().getJwt());
                         Intent homeIntent = new Intent(getApplicationContext(), MainActivity.class);
@@ -120,12 +118,10 @@ public class LoginActivity extends AppCompatActivity {
                     }
 
                     @Override
-                    public void onFailure(Call<AuthResponse> call, Throwable t) {
+                    public void onFailure(@NonNull Call<AuthResponse> call, @NonNull Throwable t) {
                         Log.d("LOGIN", "FAILED");
                     }
                 });
-
     }
-
 
 }

@@ -1,10 +1,9 @@
 package com.creativelabs.myshopping.entity;
 
 public class AuthResponse {
-
     private String jwt;
-    private int id;
     private String email;
+    private int id;
 
     public String getJwt() {
         return jwt;
@@ -14,19 +13,19 @@ public class AuthResponse {
         this.jwt = jwt;
     }
 
-    public int getId() {
-        return id;
-    }
-
-    public void setId(int id) {
-        this.id = id;
-    }
-
     public String getEmail() {
         return email;
     }
 
     public void setEmail(String email) {
         this.email = email;
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
     }
 }

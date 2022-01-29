@@ -1,54 +1,38 @@
 package com.creativelabs.myshopping.utils;
 
+import java.util.concurrent.TimeUnit;
 
 import com.google.gson.GsonBuilder;
 
-import java.util.concurrent.TimeUnit;
-
 import okhttp3.OkHttpClient;
-import okhttp3.logging.HttpLoggingInterceptor;
 import retrofit2.Retrofit;
-
-import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory;
 import retrofit2.converter.gson.GsonConverterFactory;
 
 public class NetworkService {
 
-    public static final String BASE_URL = "https://bc03-112-134-186-212.ngrok.io/api/";
+    public static final String BASE_URL = "https://7abf-2402-4000-2381-395c-b4cc-96b0-bae7-ded6.ngrok.io/api/";
     public String accessToken;
 
-    private NetworkService() {
-    }
-
-    private NetworkService(String accessToken) {
+    public NetworkService(String accessToken) {
         this.accessToken = accessToken;
     }
 
-    public static NetworkService getInstance(String accessToken){
+    public static NetworkService getInstance(String accessToken) {
         return new NetworkService(accessToken);
-    }
-
-    public static NetworkService getInstance(){
-        return new NetworkService();
     }
 
     public <S> S getService(Class<S> serviceClass) {
 
         OkHttpClient.Builder httpClient = new OkHttpClient.Builder()
-                .addInterceptor(new HttpLoggingInterceptor().setLevel(HttpLoggingInterceptor.Level.BODY))
                 .connectTimeout(30, TimeUnit.SECONDS)
                 .readTimeout(30, TimeUnit.SECONDS)
-                .addInterceptor(new BasicAuthIntercepter(accessToken));
+                .addInterceptor(new BasicAuthItercepter(accessToken));
 
 
-
-
-        Retrofit.Builder builder =
-                new Retrofit.Builder()
-                        .baseUrl(BASE_URL)
-                        .addConverterFactory(GsonConverterFactory.create(new GsonBuilder().serializeNulls().create()))
-                        .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
-                        .client(httpClient.build());
+        Retrofit.Builder builder = new Retrofit.Builder()
+                .baseUrl(BASE_URL)
+                .addConverterFactory(GsonConverterFactory.create(new GsonBuilder().serializeNulls().create()))
+                .client(httpClient.build());
 
         Retrofit retrofit = builder.build();
 

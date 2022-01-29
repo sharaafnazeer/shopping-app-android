@@ -35,14 +35,14 @@
 
         <com.travijuu.numberpicker.library.NumberPicker
             android:id="@+id/npQuantity"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.5"
             app:layout_constraintStart_toEndOf="@+id/ibRemoveCartItem"
-            numberpicker:min="1"
-            app:layout_constraintTop_toBottomOf="@+id/tvItemName" />
+            app:layout_constraintTop_toBottomOf="@+id/tvItemName"
+            numberpicker:min="1" />
 
         <ImageButton
             android:id="@+id/ibRemoveCartItem"

@@ -1,7 +1,6 @@
 package com.creativelabs.myshopping.entity;
 
 public class Cart {
-
     private int id;
     private int productId;
     private String productName;
@@ -9,7 +8,6 @@ public class Cart {
     private double productPrice;
     private double totalPrice;
     private String image;
-    private int userId;
 
     public int getId() {
         return id;
@@ -65,13 +63,5 @@ public class Cart {
 
     public void setImage(String image) {
         this.image = image;
-    }
-
-    public int getUserId() {
-        return userId;
-    }
-
-    public void setUserId(int userId) {
-        this.userId = userId;
     }
 }

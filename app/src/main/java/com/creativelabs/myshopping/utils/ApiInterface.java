@@ -5,7 +5,6 @@ import com.creativelabs.myshopping.entity.Auth;
 import com.creativelabs.myshopping.entity.AuthResponse;
 import com.creativelabs.myshopping.entity.Cart;
 import com.creativelabs.myshopping.entity.Category;
-import com.creativelabs.myshopping.entity.Order;
 import com.creativelabs.myshopping.entity.Product;
 import com.creativelabs.myshopping.entity.User;
 
@@ -23,20 +22,19 @@ import retrofit2.http.Query;
 public interface ApiInterface {
 
     // Category Related
-
     @GET("category")
     Call<List<Category>> getAllCategories();
 
     @GET("category/{id}")
-    Call<List<Category>> getOneCategory(@Path("id") int categoryId);
+    Call<Category> getOneCategory(@Path("id") int categoryId);
 
     // Product Related
 
-    @GET("product")
+    @GET("product") // product?categoryId=1
     Call<List<Product>> getAllProducts(@Query("categoryId") int categoryId);
 
     @GET("product/{id}")
-    Call<List<Product>> getOneProduct(@Path("id") int productId);
+    Call<Product> getOneProduct(@Path("id") int productId);
 
     // Cart Related
 
@@ -54,8 +52,8 @@ public interface ApiInterface {
 
     // Order Related
 
-    @GET("order")
-    Call<List<Order>> getAllOrders(@Query("status") int status);
+    @GET("cart")
+    Call<List<Cart>> getAllOrders(@Query("status") int status);
 
     // Auth Related
 
@@ -63,5 +61,7 @@ public interface ApiInterface {
     Call<AuthResponse> login(@Body Auth user);
 
     @POST("auth/register")
-    Call<User> register(@Body User user);
+    Call<AuthResponse> register(@Body User user);
+
+
 }
